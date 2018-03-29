@@ -1,0 +1,25 @@
+trigger ClosedOpportunityTrigger on Opportunity (before insert, after update) {
+	// Create a List of tasks
+    List<Task> taskList = new List<Task>();
+	
+    // Simple loop for find oportunity when tirger running a new one
+    for (Opportunity Opp: Trigger.new){
+        // When triger is inserting and stageName is == to value thane add new Task wiht Subject and WhatId same like oportunity id
+        if (Trigger.isInsert){
+            if (Opp.StageName == 'Closed Won'){
+           tasklist.add(new Task(Subject = 'Follow Up Test Task', WhatId = opp.Id));
+        }
+    }
+        // When trigger is updated and StageName is Closed Won and StageName is not equeals to tigeer old opp id then update below
+        if (Trigger.isUpdate){
+            if(Opp.StageName == 'Closed Won' && Opp.StageName != Trigger.oldMap.get(Opp.Id).StageName){
+           tasklist.add(new Task(Subject = 'Follow Up Test Task', WhatId = opp.Id));
+            }
+        }
+    }
+    
+    // If something is in tasklists insert it!
+    if (taskList.size() > 0){
+        insert taskList;
+    }
+}
